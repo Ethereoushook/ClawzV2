@@ -1065,7 +1065,7 @@ do
             Text = Info.Default;
             TextWrapped = false;
             TextTruncate = Enum.TextTruncate.AtEnd;
-            ZIndex = 8;
+            ZIndex = PickZ + 2;
             Parent = PickInner;
         });
         local function ResizeKeyButton()
@@ -1386,13 +1386,15 @@ do
         local Groupbox = self;
         local Container = Groupbox.Container;
 
+        local LabelZ = math.max(Container.ZIndex or 5, 5) + 1;
+
         local TextLabel = Library:CreateLabel({
             Size = UDim2.new(1, -4, 0, 15);
             TextSize = 14;
             Text = Text;
             TextWrapped = DoesWrap or false,
             TextXAlignment = Enum.TextXAlignment.Left;
-            ZIndex = 5;
+            ZIndex = LabelZ;
             Parent = Container;
         });
 
@@ -1457,7 +1459,7 @@ do
 
         local function CreateBaseButton(Button)
             -- Relative to the container, matching the toggle and input.
-            local BtnZ = (Container.ZIndex or 5) + 1;
+            local BtnZ = math.max(Container.ZIndex or 5, 5) + 1;
 
             local Outer = Library:Create('Frame', {
                 Name = 'ButtonOuter';
@@ -1634,11 +1636,12 @@ do
         }
 
         Groupbox:AddBlank(2);
+        local DividerZ = math.max(Container.ZIndex or 5, 5) + 1;
         local DividerOuter = Library:Create('Frame', {
             BackgroundColor3 = Color3.new(0, 0, 0);
             BorderColor3 = Color3.new(0, 0, 0);
             Size = UDim2.new(1, -4, 0, 5);
-            ZIndex = 5;
+            ZIndex = DividerZ;
             Parent = Container;
         });
 
@@ -1647,7 +1650,7 @@ do
             BorderColor3 = Library.OutlineColor;
             BorderMode = Enum.BorderMode.Inset;
             Size = UDim2.new(1, 0, 1, 0);
-            ZIndex = 6;
+            ZIndex = DividerZ + 1;
             Parent = DividerOuter;
         });
 
@@ -1678,12 +1681,14 @@ do
         local Groupbox = self;
         local Container = Groupbox.Container;
 
+        local InputLabelZ = math.max(Container.ZIndex or 5, 5) + 1;
+
         local InputLabel = Library:CreateLabel({
             Size = UDim2.new(1, 0, 0, 15);
             TextSize = 14;
             Text = Info.Text;
             TextXAlignment = Enum.TextXAlignment.Left;
-            ZIndex = 5;
+            ZIndex = InputLabelZ;
             Parent = Container;
         });
 
@@ -1691,7 +1696,7 @@ do
 
         -- Relative to the groupbox container: a fixed ZIndex ends up under the
         -- panel's own frames in places where the container sits at a higher layer.
-        local InputZ = (Container.ZIndex or 5) + 1;
+        local InputZ = math.max(Container.ZIndex or 5, 5) + 1;
 
         local TextBoxOuter = Library:Create('Frame', {
             BackgroundColor3 = Color3.new(0, 0, 0);
@@ -1864,7 +1869,7 @@ do
         -- Relative to the groupbox container, for the same reason as the text input:
         -- a fixed ZIndex sits under the panel's own frames wherever the container is
         -- on a higher layer, which hides the checkbox.
-        local ToggleZ = (Container.ZIndex or 5) + 1;
+        local ToggleZ = math.max(Container.ZIndex or 5, 5) + 1;
 
         local ToggleOuter = Library:Create('Frame', {
             BackgroundColor3 = Color3.new(0, 0, 0);
@@ -1919,7 +1924,7 @@ do
         local ToggleRegion = Library:Create('Frame', {
             BackgroundTransparency = 1;
             Size = UDim2.new(0, 170, 1, 0);
-            ZIndex = 8;
+            ZIndex = ToggleZ + 3;
             Parent = ToggleOuter;
         });
         Container:GetPropertyChangedSignal('AbsoluteSize'):Connect(function()
@@ -2018,7 +2023,7 @@ do
         local Groupbox = self;
         local Container = Groupbox.Container;
 
-        local SliderZ = (Container.ZIndex or 5) + 1;
+        local SliderZ = math.max(Container.ZIndex or 5, 5) + 1;
 
         if not Info.Compact then
             Library:CreateLabel({
@@ -2245,7 +2250,7 @@ do
         local Container = Groupbox.Container;
 
         local Inline = not Info.Compact and Info.Inline ~= false;
-        local DropdownZ = (Container.ZIndex or 5) + 1;
+        local DropdownZ = math.max(Container.ZIndex or 5, 5) + 1;
         local DropdownParent = Container;
         if Inline then
             DropdownParent = Library:Create('Frame', {
