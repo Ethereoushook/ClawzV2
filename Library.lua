@@ -15,6 +15,10 @@ local ScreenGui = Instance.new('ScreenGui');
 ProtectGui(ScreenGui);
 
 ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Global;
+-- Games render their own menus at DisplayOrder 10-100, which would draw over the
+-- whole library. Without this the UI only shows in places that have no GUI of
+-- their own, e.g. an empty baseplate.
+ScreenGui.DisplayOrder = 999;
 ScreenGui.Parent = CoreGui;
 
 local Toggles = {};
@@ -441,19 +445,23 @@ do
 
         ColorPicker:SetHSVFromRGB(ColorPicker.Value);
 
+        -- Must sit above its own parent: under Global ZIndexBehavior a child with a
+        -- lower ZIndex than its ancestors renders behind them and the swatch vanishes.
+        local SwatchZ = ToggleLabel.ZIndex + 1;
+
         local DisplayFrame = Library:Create('Frame', {
             BackgroundColor3 = ColorPicker.Value;
             BorderColor3 = Library:GetDarkerColor(ColorPicker.Value);
             BorderMode = Enum.BorderMode.Inset;
             Size = UDim2.new(0, 28, 0, 14);
-            ZIndex = 6;
+            ZIndex = SwatchZ;
             Parent = ToggleLabel;
         });
 
         local CheckerFrame = Library:Create('ImageLabel', {
             BorderSizePixel = 0;
             Size = UDim2.new(0, 27, 0, 13);
-            ZIndex = 5;
+            ZIndex = SwatchZ + 1;
             Image = 'http://www.roblox.com/asset/?id=12977615774';
             Visible = not not Info.Transparency;
             Parent = DisplayFrame;
@@ -1025,12 +1033,15 @@ do
         };
 
 
+        -- Same rule as the colour swatch: stay above ToggleLabel's own ZIndex.
+        local PickZ = ToggleLabel.ZIndex + 1;
+
         local PickOuter = Library:Create('Frame', {
             Name = 'KeybindButton';
             BackgroundColor3 = Color3.new(0, 0, 0);
             BorderColor3 = Color3.new(0, 0, 0);
             Size = UDim2.new(0, 28, 0, 15);
-            ZIndex = 6;
+            ZIndex = PickZ;
             Parent = ToggleLabel;
         });
 
@@ -1039,7 +1050,7 @@ do
             BorderColor3 = Library.OutlineColor;
             BorderMode = Enum.BorderMode.Inset;
             Size = UDim2.new(1, 0, 1, 0);
-            ZIndex = 7;
+            ZIndex = PickZ + 1;
             Parent = PickOuter;
         });
 
@@ -1675,11 +1686,15 @@ do
 
         Groupbox:AddBlank(1);
 
+        -- Relative to the groupbox container: a fixed ZIndex ends up under the
+        -- panel's own frames in places where the container sits at a higher layer.
+        local InputZ = (Container.ZIndex or 5) + 1;
+
         local TextBoxOuter = Library:Create('Frame', {
             BackgroundColor3 = Color3.new(0, 0, 0);
             BorderColor3 = Color3.new(0, 0, 0);
             Size = UDim2.new(1, -4, 0, 20);
-            ZIndex = 5;
+            ZIndex = InputZ;
             Parent = Container;
         });
 
@@ -1688,7 +1703,7 @@ do
             BorderColor3 = Library.OutlineColor;
             BorderMode = Enum.BorderMode.Inset;
             Size = UDim2.new(1, 0, 1, 0);
-            ZIndex = 6;
+            ZIndex = InputZ + 1;
             Parent = TextBoxOuter;
         });
 
@@ -1722,7 +1737,7 @@ do
             Position = UDim2.new(0, 5, 0, 0);
             Size = UDim2.new(1, -5, 1, 0);
 
-            ZIndex = 7;
+            ZIndex = InputZ + 2;
             Parent = TextBoxInner;
         })
 
@@ -1742,7 +1757,7 @@ do
             TextStrokeTransparency = 0;
             TextXAlignment = Enum.TextXAlignment.Left;
 
-            ZIndex = 7;
+            ZIndex = InputZ + 3;
             Parent = Container;
         });
 
@@ -2997,6 +3012,7 @@ function Library:CreateWindow(...)
         ScreenGui = Instance.new('ScreenGui');
         ProtectGui(ScreenGui);
         ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Global;
+        ScreenGui.DisplayOrder = 999;
         ScreenGui.Parent = CoreGui;
         Library.ScreenGui = ScreenGui;
     end;
