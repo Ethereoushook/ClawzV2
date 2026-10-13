@@ -1456,12 +1456,15 @@ do
         local Container = Groupbox.Container;
 
         local function CreateBaseButton(Button)
+            -- Relative to the container, matching the toggle and input.
+            local BtnZ = (Container.ZIndex or 5) + 1;
+
             local Outer = Library:Create('Frame', {
                 Name = 'ButtonOuter';
                 BackgroundColor3 = Color3.new(0, 0, 0);
                 BorderColor3 = Color3.new(0, 0, 0);
                 Size = UDim2.new(1, -4, 0, 20);
-                ZIndex = 5;
+                ZIndex = BtnZ;
             });
 
             local Inner = Library:Create('Frame', {
@@ -1469,7 +1472,7 @@ do
                 BorderColor3 = Library.OutlineColor;
                 BorderMode = Enum.BorderMode.Inset;
                 Size = UDim2.new(1, 0, 1, 0);
-                ZIndex = 6;
+                ZIndex = BtnZ + 1;
                 Parent = Outer;
             });
 
@@ -1479,7 +1482,7 @@ do
                 TextTruncate = Enum.TextTruncate.AtEnd;
                 TextSize = 14;
                 Text = Button.Text;
-                ZIndex = 6;
+                ZIndex = BtnZ + 2;
                 Parent = Inner;
             });
 
@@ -1858,11 +1861,16 @@ do
         local Groupbox = self;
         local Container = Groupbox.Container;
 
+        -- Relative to the groupbox container, for the same reason as the text input:
+        -- a fixed ZIndex sits under the panel's own frames wherever the container is
+        -- on a higher layer, which hides the checkbox.
+        local ToggleZ = (Container.ZIndex or 5) + 1;
+
         local ToggleOuter = Library:Create('Frame', {
             BackgroundColor3 = Color3.new(0, 0, 0);
             BorderColor3 = Color3.new(0, 0, 0);
             Size = UDim2.new(0, 13, 0, 13);
-            ZIndex = 5;
+            ZIndex = ToggleZ;
             Parent = Container;
         });
 
@@ -1875,7 +1883,7 @@ do
             BorderColor3 = Library.OutlineColor;
             BorderMode = Enum.BorderMode.Inset;
             Size = UDim2.new(1, 0, 1, 0);
-            ZIndex = 6;
+            ZIndex = ToggleZ + 1;
             Parent = ToggleOuter;
         });
 
@@ -1890,7 +1898,7 @@ do
             TextSize = 14;
             Text = Info.Text;
             TextXAlignment = Enum.TextXAlignment.Left;
-            ZIndex = 6;
+            ZIndex = ToggleZ + 2;
             Parent = ToggleInner;
         });
         local function ResizeToggleRow()
@@ -2010,6 +2018,8 @@ do
         local Groupbox = self;
         local Container = Groupbox.Container;
 
+        local SliderZ = (Container.ZIndex or 5) + 1;
+
         if not Info.Compact then
             Library:CreateLabel({
                 Size = UDim2.new(1, 0, 0, 10);
@@ -2017,7 +2027,7 @@ do
                 Text = Info.Text;
                 TextXAlignment = Enum.TextXAlignment.Left;
                 TextYAlignment = Enum.TextYAlignment.Bottom;
-                ZIndex = 5;
+                ZIndex = SliderZ + 1;
                 Parent = Container;
             });
 
@@ -2029,7 +2039,7 @@ do
             BackgroundColor3 = Color3.new(0, 0, 0);
             BorderColor3 = Color3.new(0, 0, 0);
             Size = UDim2.new(1, -4, 0, 13);
-            ZIndex = 5;
+            ZIndex = SliderZ;
             Parent = Container;
         });
 
@@ -2043,7 +2053,7 @@ do
             BorderColor3 = Library.OutlineColor;
             BorderMode = Enum.BorderMode.Inset;
             Size = UDim2.new(1, 0, 1, 0);
-            ZIndex = 6;
+            ZIndex = SliderZ + 1;
             Parent = SliderOuter;
         });
 
@@ -2057,7 +2067,7 @@ do
             BackgroundColor3 = Library.AccentColor;
             BorderColor3 = Library.AccentColorDark;
             Size = UDim2.new(0, 0, 1, 0);
-            ZIndex = 7;
+            ZIndex = SliderZ + 2;
             Parent = SliderInner;
         });
 
@@ -2071,7 +2081,7 @@ do
             BorderSizePixel = 0;
             Position = UDim2.new(1, 0, 0, 0);
             Size = UDim2.new(0, 1, 1, 0);
-            ZIndex = 8;
+            ZIndex = SliderZ + 3;
             Parent = Fill;
         });
 
@@ -2083,7 +2093,7 @@ do
             Size = UDim2.new(1, 0, 1, 0);
             TextSize = 14;
             Text = 'Infinite';
-            ZIndex = 9;
+            ZIndex = SliderZ + 4;
             Parent = SliderInner;
         });
 
@@ -2235,6 +2245,7 @@ do
         local Container = Groupbox.Container;
 
         local Inline = not Info.Compact and Info.Inline ~= false;
+        local DropdownZ = (Container.ZIndex or 5) + 1;
         local DropdownParent = Container;
         if Inline then
             DropdownParent = Library:Create('Frame', {
@@ -2249,7 +2260,7 @@ do
                 Text = Info.Text;
                 TextXAlignment = Enum.TextXAlignment.Left;
                 TextTruncate = Enum.TextTruncate.AtEnd;
-                ZIndex = 5;
+                ZIndex = DropdownZ + 1;
                 Parent = DropdownParent;
             });
         end;
@@ -2261,7 +2272,7 @@ do
                 Text = Info.Text;
                 TextXAlignment = Enum.TextXAlignment.Left;
                 TextYAlignment = Enum.TextYAlignment.Bottom;
-                ZIndex = 5;
+                ZIndex = DropdownZ + 1;
                 Parent = Container;
             });
 
@@ -2273,7 +2284,7 @@ do
             BorderColor3 = Color3.new(0, 0, 0);
             Size = Inline and UDim2.new(0.6, 0, 0, 20) or UDim2.new(1, -4, 0, 20);
             Position = Inline and UDim2.fromScale(0.4, 0) or UDim2.fromOffset(0, 0);
-            ZIndex = 5;
+                ZIndex = DropdownZ;
             Parent = DropdownParent;
         });
 
@@ -2286,7 +2297,7 @@ do
             BorderColor3 = Library.OutlineColor;
             BorderMode = Enum.BorderMode.Inset;
             Size = UDim2.new(1, 0, 1, 0);
-            ZIndex = 6;
+            ZIndex = DropdownZ + 1;
             Parent = DropdownOuter;
         });
 
@@ -2310,7 +2321,7 @@ do
             Position = UDim2.new(1, -16, 0.5, 0);
             Size = UDim2.new(0, 12, 0, 12);
             Image = 'http://www.roblox.com/asset/?id=6282522798';
-            ZIndex = 8;
+            ZIndex = DropdownZ + 3;
             Parent = DropdownInner;
         });
 
@@ -2321,7 +2332,7 @@ do
             Text = '--';
             TextXAlignment = Enum.TextXAlignment.Left;
             TextWrapped = true;
-            ZIndex = 7;
+            ZIndex = DropdownZ + 2;
             Parent = DropdownInner;
         });
 
