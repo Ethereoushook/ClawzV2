@@ -15,6 +15,7 @@ local ScreenGui = Instance.new('ScreenGui');
 ProtectGui(ScreenGui);
 
 ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Global;
+ScreenGui.DisplayOrder = 2147483647; -- int32 max, draw above game GUIs with DisplayOrder > 0
 ScreenGui.Parent = CoreGui;
 
 local Toggles = {};
@@ -2997,6 +2998,7 @@ function Library:CreateWindow(...)
         ScreenGui = Instance.new('ScreenGui');
         ProtectGui(ScreenGui);
         ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Global;
+        ScreenGui.DisplayOrder = 2147483647;
         ScreenGui.Parent = CoreGui;
         Library.ScreenGui = ScreenGui;
     end;
