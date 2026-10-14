@@ -27,6 +27,12 @@ local Options = {};
 getgenv().Toggles = Toggles;
 getgenv().Options = Options;
 
+-- Layer for anything that floats above the group content: dropdown lists, colour
+-- pickers, key mode menus. They live directly under ScreenGui, so a fixed low
+-- ZIndex would drop them behind the panel's own controls, whose ZIndex is derived
+-- from their groupbox container. Sits below the HUD range (100+).
+local POPUP_Z = 60;
+
 local Library = {
     Registry = {};
     RegistryMap = {};
@@ -475,7 +481,7 @@ do
             Position = UDim2.fromOffset(DisplayFrame.AbsolutePosition.X, DisplayFrame.AbsolutePosition.Y + 18),
             Size = UDim2.fromOffset(230, Info.Transparency and 271 or 253);
             Visible = false;
-            ZIndex = 15;
+            ZIndex = POPUP_Z;
             Parent = ScreenGui,
         });
 
@@ -488,7 +494,7 @@ do
             BorderColor3 = Library.OutlineColor;
             BorderMode = Enum.BorderMode.Inset;
             Size = UDim2.new(1, 0, 1, 0);
-            ZIndex = 16;
+            ZIndex = POPUP_Z + 1;
             Parent = PickerFrameOuter;
         });
 
@@ -496,7 +502,7 @@ do
             BackgroundColor3 = Library.AccentColor;
             BorderSizePixel = 0;
             Size = UDim2.new(1, 0, 0, 2);
-            ZIndex = 17;
+            ZIndex = POPUP_Z + 2;
             Parent = PickerFrameInner;
         });
 
@@ -504,7 +510,7 @@ do
             BorderColor3 = Color3.new(0, 0, 0);
             Position = UDim2.new(0, 4, 0, 25);
             Size = UDim2.new(0, 200, 0, 200);
-            ZIndex = 17;
+            ZIndex = POPUP_Z + 2;
             Parent = PickerFrameInner;
         });
 
@@ -513,14 +519,14 @@ do
             BorderColor3 = Library.OutlineColor;
             BorderMode = Enum.BorderMode.Inset;
             Size = UDim2.new(1, 0, 1, 0);
-            ZIndex = 18;
+            ZIndex = POPUP_Z + 3;
             Parent = SatVibMapOuter;
         });
 
         local SatVibMap = Library:Create('ImageLabel', {
             BorderSizePixel = 0;
             Size = UDim2.new(1, 0, 1, 0);
-            ZIndex = 18;
+            ZIndex = POPUP_Z + 3;
             Image = 'rbxassetid://4155801252';
             Parent = SatVibMapInner;
         });
@@ -531,7 +537,7 @@ do
             BackgroundTransparency = 1;
             Image = 'http://www.roblox.com/asset/?id=9619665977';
             ImageColor3 = Color3.new(0, 0, 0);
-            ZIndex = 19;
+            ZIndex = POPUP_Z + 4;
             Parent = SatVibMap;
         });
 
@@ -540,7 +546,7 @@ do
             Position = UDim2.new(0, 1, 0, 1);
             BackgroundTransparency = 1;
             Image = 'http://www.roblox.com/asset/?id=9619665977';
-            ZIndex = 20;
+            ZIndex = POPUP_Z + 5;
             Parent = CursorOuter;
         })
 
@@ -548,7 +554,7 @@ do
             BorderColor3 = Color3.new(0, 0, 0);
             Position = UDim2.new(0, 208, 0, 25);
             Size = UDim2.new(0, 15, 0, 200);
-            ZIndex = 17;
+            ZIndex = POPUP_Z + 2;
             Parent = PickerFrameInner;
         });
 
@@ -556,7 +562,7 @@ do
             BackgroundColor3 = Color3.new(1, 1, 1);
             BorderSizePixel = 0;
             Size = UDim2.new(1, 0, 1, 0);
-            ZIndex = 18;
+            ZIndex = POPUP_Z + 3;
             Parent = HueSelectorOuter;
         });
 
@@ -565,7 +571,7 @@ do
             AnchorPoint = Vector2.new(0, 0.5);
             BorderColor3 = Color3.new(0, 0, 0);
             Size = UDim2.new(1, 0, 0, 1);
-            ZIndex = 18;
+            ZIndex = POPUP_Z + 3;
             Parent = HueSelectorInner;
         });
 
@@ -573,7 +579,7 @@ do
             BorderColor3 = Color3.new(0, 0, 0);
             Position = UDim2.fromOffset(4, 228),
             Size = UDim2.new(0.5, -6, 0, 20),
-            ZIndex = 18,
+            ZIndex = POPUP_Z + 3,
             Parent = PickerFrameInner;
         });
 
@@ -582,7 +588,7 @@ do
             BorderColor3 = Library.OutlineColor;
             BorderMode = Enum.BorderMode.Inset;
             Size = UDim2.new(1, 0, 1, 0);
-            ZIndex = 18,
+            ZIndex = POPUP_Z + 3,
             Parent = HueBoxOuter;
         });
 
@@ -607,7 +613,7 @@ do
             TextSize = 14;
             TextStrokeTransparency = 0;
             TextXAlignment = Enum.TextXAlignment.Left;
-            ZIndex = 20,
+            ZIndex = POPUP_Z + 5,
             Parent = HueBoxInner;
         });
 
@@ -632,7 +638,7 @@ do
                 BorderColor3 = Color3.new(0, 0, 0);
                 Position = UDim2.fromOffset(4, 251);
                 Size = UDim2.new(1, -8, 0, 15);
-                ZIndex = 19;
+                ZIndex = POPUP_Z + 4;
                 Parent = PickerFrameInner;
             });
 
@@ -641,7 +647,7 @@ do
                 BorderColor3 = Library.OutlineColor;
                 BorderMode = Enum.BorderMode.Inset;
                 Size = UDim2.new(1, 0, 1, 0);
-                ZIndex = 19;
+                ZIndex = POPUP_Z + 4;
                 Parent = TransparencyBoxOuter;
             });
 
@@ -651,7 +657,7 @@ do
                 BackgroundTransparency = 1;
                 Size = UDim2.new(1, 0, 1, 0);
                 Image = 'http://www.roblox.com/asset/?id=12978095818';
-                ZIndex = 20;
+                ZIndex = POPUP_Z + 5;
                 Parent = TransparencyBoxInner;
             });
 
@@ -660,7 +666,7 @@ do
                 AnchorPoint = Vector2.new(0.5, 0);
                 BorderColor3 = Color3.new(0, 0, 0);
                 Size = UDim2.new(0, 1, 1, 0);
-                ZIndex = 21;
+                ZIndex = POPUP_Z + 6;
                 Parent = TransparencyBoxInner;
             });
         end;
@@ -672,7 +678,7 @@ do
             TextSize = 14;
             Text = ColorPicker.Title,
             TextWrapped = false;
-            ZIndex = 16;
+            ZIndex = POPUP_Z + 1;
             Parent = PickerFrameInner;
         });
 
@@ -682,7 +688,7 @@ do
             ContextMenu.Options = {}
             ContextMenu.Container = Library:Create('Frame', {
                 BorderColor3 = Color3.new(),
-                ZIndex = 14,
+                ZIndex = POPUP_Z + 1,
 
                 Visible = false,
                 Parent = ScreenGui
@@ -693,7 +699,7 @@ do
                 BorderColor3 = Library.OutlineColor;
                 BorderMode = Enum.BorderMode.Inset;
                 Size = UDim2.fromScale(1, 1);
-                ZIndex = 15;
+                ZIndex = POPUP_Z + 1;
                 Parent = ContextMenu.Container;
             });
 
@@ -761,7 +767,7 @@ do
                     Size = UDim2.new(1, 0, 0, 15);
                     TextSize = 13;
                     Text = Str;
-                    ZIndex = 16;
+                    ZIndex = POPUP_Z + 2;
                     Parent = self.Inner;
                     TextXAlignment = Enum.TextXAlignment.Left,
                 });
@@ -1081,7 +1087,7 @@ do
             Position = UDim2.fromOffset(ToggleLabel.AbsolutePosition.X + ToggleLabel.AbsoluteSize.X + 4, ToggleLabel.AbsolutePosition.Y + 1);
             Size = UDim2.new(0, 60, 0, 45 + 2);
             Visible = false;
-            ZIndex = 14;
+            ZIndex = POPUP_Z;
             Parent = ScreenGui;
         });
 
@@ -1096,7 +1102,7 @@ do
             BorderColor3 = Library.OutlineColor;
             BorderMode = Enum.BorderMode.Inset;
             Size = UDim2.new(1, 0, 1, 0);
-            ZIndex = 15;
+            ZIndex = POPUP_Z + 1;
             Parent = ModeSelectOuter;
         });
 
@@ -1131,7 +1137,7 @@ do
                 Size = UDim2.new(1, 0, 0, 15);
                 TextSize = 13;
                 Text = Mode;
-                ZIndex = 16;
+                ZIndex = POPUP_Z + 2;
                 Parent = ModeSelectInner;
             });
 
@@ -2355,7 +2361,7 @@ do
         local ListOuter = Library:Create('Frame', {
             BackgroundColor3 = Color3.new(0, 0, 0);
             BorderColor3 = Color3.new(0, 0, 0);
-            ZIndex = 20;
+            ZIndex = POPUP_Z;
             Visible = false;
             Parent = ScreenGui;
         });
@@ -2383,7 +2389,7 @@ do
             BorderMode = Enum.BorderMode.Inset;
             BorderSizePixel = 0;
             Size = UDim2.new(1, 0, 1, 0);
-            ZIndex = 21;
+            ZIndex = POPUP_Z + 1;
             Parent = ListOuter;
         });
 
@@ -2397,7 +2403,7 @@ do
             BorderSizePixel = 0;
             CanvasSize = UDim2.new(0, 0, 0, 0);
             Size = UDim2.new(1, 0, 1, 0);
-            ZIndex = 21;
+            ZIndex = POPUP_Z + 1;
             Parent = ListInner;
 
             TopImage = 'rbxasset://textures/ui/Scroll/scroll-middle.png',
@@ -2473,7 +2479,7 @@ do
                     BorderColor3 = Library.OutlineColor;
                     BorderMode = Enum.BorderMode.Middle;
                     Size = UDim2.new(1, -1, 0, 20);
-                    ZIndex = 23;
+                   ZIndex = POPUP_Z + 3;
                     Active = true,
                     Parent = Scrolling;
                 });
@@ -2490,13 +2496,13 @@ do
                     TextSize = 14;
                     Text = Value;
                     TextXAlignment = Enum.TextXAlignment.Left;
-                    ZIndex = 25;
+                   ZIndex = POPUP_Z + 5;
                     Parent = Button;
                 });
 
                 Library:OnHighlight(Button, Button,
-                    { BorderColor3 = 'AccentColor', ZIndex = 24 },
-                    { BorderColor3 = 'OutlineColor', ZIndex = 23 }
+                    { BorderColor3 = 'AccentColor', ZIndex = POPUP_Z + 4 },
+                    { BorderColor3 = 'OutlineColor', ZIndex = POPUP_Z + 3 }
                 );
 
                 local Selected;
